@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    build: ./db
+    environment:
+      POSTGRES_DB: users_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  user_service:
+    build: ./user_service
+    ports:
+      - "5001:5001"
+    environment:
+      DB_HOST: db
+      DB_NAME: users_db
+      DB_USER: postgres
+      DB_PASSWORD: password
+    depends_on:
+      - db
+
+  product_service:
+    build: ./product_service
+    ports:
+      - "5002:5002"
+    environment:
+      DB_HOST: db
+      DB_NAME: products_db
+      DB_USER: postgres
+      DB_PASSWORD: password
+    depends_on:
+      - db
